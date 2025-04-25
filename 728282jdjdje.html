@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8675825073783230"
+     crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nhận quà free</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 20px;
+    }
+    .header {
+      background-color: #222;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .balance, .daily-btn {
+      background-color: #ff9900;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+    .videos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+    iframe {
+      width: 100%;
+      height: 120px;
+    }
+    .section-title {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #fcd535;
+    }
+    .button {
+      background-color: #007acc;
+      padding: 10px 15px;
+      margin: 10px 5px;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+    }
+    .mailbox, .checkin-info {
+      background: #222;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+    .countdown {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffcc00;
+      margin-top: 10px;
+    }
+    .login-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .login-form input {
+      padding: 8px;
+      border-radius: 5px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="login-form" id="loginForm">
+
+<div id="logoutBtn" style="display:none;">
+  <button onclick="logout()" class="button" style="background:#cc0000;">Đăng xuất</button>
+</div>
+
+      <input type="text" id="registerUsername" placeholder="Tên đăng ký" />
+      <input type="password" id="registerPassword" placeholder="Mật khẩu đăng ký" />
+      <button onclick="register()" class="button">Đăng ký</button>
+      <input type="text" id="username" placeholder="Tên đăng nhập" />
+      <input type="password" id="password" placeholder="Mật khẩu" />
+      <button onclick="login()" class="button">Đăng nhập</button>
+    </div>
+    <div class="balance">Xu: <span id="xu">0</span></div>
+    
+    <div class="daily-btn"><button onclick="checkIn()" class="button">Điểm danh</button></div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">TĂNG TỐC NHẬN QUÀ</div>
+<!-- Google AdSense Display -->
+<ins class="adsbygoogle"
+     style="display:block; text-align:center; margin: 10px auto;"
+     data-ad-client="ca-pub-8675825073783230"
+     data-ad-slot="1234567890"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+    <div class="videos" id="videoList"></div>
+
+    <div class="countdown" id="countdown">00:00</div>
+    <button id="claimButton" onclick="claimVideoReward()" class="button"
+      style="position:fixed; bottom:20px; right:20px; opacity:0.5; pointer-events:none; background:#ff9900;">
+      Nhận 100 xu
+    </button>
+
+    
+    <button onclick="redeem()" class="button" style="background-color:#007acc;">Rút thẻ cào</button>
+    
+
+<button onclick="lienHeAdmin()" class="button" style="background-color:#0084ff;">Liên hệ Admin</button>
+
+
+    
+
+    <div class="section-title">Hòm thư</div>
+    <div class="mailbox" id="mailbox">Chưa có thông báo</div>
+
+    <div class="section-title">Lịch điểm danh</div>
+    <div class="checkin-info" id="calendarContainer">
+      <table id="calendarTable" style="width:100%; text-align:center; background:#222; border-radius:10px; color:white;">
+        <tbody id="calendarBody"></tbody>
+      </table>
+    </div>
+    <div class="section-title">Thông tin điểm danh</div>
+    <div class="checkin-info" id="checkinInfo">Chưa điểm danh hôm nay</div>
+
+
+<div id="adminPanel" style="display:none; background:#333; color:white; padding:20px; border-radius:10px; margin:20px 0;">
+  <h3>Giao diện Admin</h3>
+  <p style="color:#fcd535;">Danh sách yêu cầu rút thẻ:</p>
+  <div id="yeuCauMoi" style="white-space:pre-line; margin-bottom:10px;"></div>
+  <input id="maThe" placeholder="Mã thẻ" style="padding:8px; margin:5px;" />
+  <input id="seri" placeholder="Seri thẻ" style="padding:8px; margin:5px;" />
+  <button onclick="duyetThe()" class="button">Gửi thẻ</button>
+</div>
+
+
+  </div>
+
+  <!-- Popup chọn thẻ cào -->
+  <div id="redeemPopup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background-color: rgba(0,0,0,0.7); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#222; padding:20px; border-radius:10px; color:white; text-align:center;">
+      <h3>Chọn loại thẻ và mệnh giá</h3>
+      <select id="networkSelect" style="padding:8px; margin:10px;">
+        <option value="Viettel">Viettel</option>
+        <option value="Vinaphone">Vinaphone</option>
+        <option value="Garena">Garena</option>
+      </select>
+      <select id="amountSelect" style="padding:8px; margin:10px;">
+        <option value="10000">10.000đ</option>
+        <option value="20000">20.000đ</option>
+        <option value="50000">50.000đ</option>
+      </select>
+      <br/>
+      <button onclick="confirmRedeem()" class="button" style="margin-top:10px;">Xác nhận</button>
+      <button onclick="closeRedeemPopup()" class="button" style="background:#666; margin-left:5px;">Hủy</button>
+    </div>
+  </div>
+
+<script>
+let users = {};
+let xu = 100000;
+let redeemRequests = {};
+let isLoggedIn = false;
+let username = "";
+let checkInStreak = 0;
+let lastCheckIn = null;
+let timer = null;
+let videoDuration = 60;
+let hasWatchedFull = false;
+let secondsWatched = 0;
+
+function register() {
+  const regUser = document.getElementById("registerUsername").value;
+  const regPass = document.getElementById("registerPassword").value;
+  if (regUser && regPass) {
+    if (users[regUser]) {
+      alert("Tên đăng ký đã tồn tại!");
+    } else {
+      users[regUser] = regPass;
+      alert("Đăng ký thành công! Bạn có thể đăng nhập ngay bây giờ.");
+      document.getElementById("registerUsername").style.display = "none";
+      document.getElementById("registerPassword").style.display = "none";
+      document.querySelectorAll("button").forEach(btn => {
+        if (btn.innerText === "Đăng ký") btn.style.display = "none";
+      });
+    }
+  } else {
+    alert("Vui lòng nhập tên và mật khẩu để đăng ký.");
+  }
+}
+
+function login() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  if (user && pass) {
+    if (!users[user] || users[user] !== pass) {
+      alert("Sai mật khẩu hoặc tài khoản không tồn tại. Vui lòng thử lại.");
+      return;
+    }
+    username = user;
+    isLoggedIn = true;
+    alert("Đăng nhập thành công! Chào mừng bạn quay lại.");
+    if (user === "admin") document.getElementById("adminPanel").style.display = "block";
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "block";
+  } else {
+    alert("Vui lòng nhập tên và mật khẩu!");
+  }
+}
+
+function updateXuDisplay() {
+  document.getElementById("xu").innerText = xu;
+}
+
+function startCountdown() {
+  secondsWatched = 0;
+  clearInterval(timer);
+  timer = setInterval(() => {
+    secondsWatched++;
+    const remaining = videoDuration - secondsWatched;
+    document.getElementById("countdown").innerText = `Còn lại: ${remaining}s`;
+    if (remaining <= 0) {
+      clearInterval(timer);
+      hasWatchedFull = true;
+      const btn = document.getElementById("claimButton");
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+    }
+  }, 1000);
+}
+
+function claimVideoReward() {
+  if (!hasWatchedFull) return alert("Bạn chưa xem đủ 60 giây!");
+  xu += 100;
+  updateXuDisplay();
+  alert("Bạn đã nhận được 100 xu!");
+  const btn = document.getElementById("claimButton");
+  btn.style.opacity = "0.5";
+  btn.style.pointerEvents = "none";
+  hasWatchedFull = false;
+}
+
+function stopCountdown() {
+  clearInterval(timer);
+}
+
+function redeem() {
+  if (!isLoggedIn) return alert("Bạn cần đăng nhập.");
+  document.getElementById("redeemPopup").style.display = "flex";
+}
+
+function confirmRedeem() {
+  const network = document.getElementById("networkSelect").value;
+  const amount = parseInt(document.getElementById("amountSelect").value);
+  if (xu < amount) {
+    alert("Bạn không đủ xu để đổi thẻ này.");
+    return;
+  }
+  xu -= amount;
+  updateXuDisplay();
+  redeemRequests[username] = `${network} - ${amount}đ`;
+  alert(`Rút thẻ ${network} mệnh giá ${amount}đ thành công. Vui lòng chờ admin duyệt.`);
+  updateAdminInfo();
+  document.getElementById("mailbox").innerText = `Đang xử lý thẻ ${network} ${amount}đ...`;
+  closeRedeemPopup();
+}
+
+function closeRedeemPopup() {
+  document.getElementById("redeemPopup").style.display = "none";
+}
+
+function checkIn() {
+  if (!isLoggedIn) return alert("Bạn cần đăng nhập.");
+  const today = new Date().toLocaleDateString();
+  if (lastCheckIn === today) {
+    alert("Bạn đã điểm danh hôm nay.");
+    return;
+  }
+  const yesterday = new Date(Date.now() - 86400000).toLocaleDateString();
+  if (lastCheckIn === yesterday) {
+    checkInStreak += 1;
+  } else {
+    checkInStreak = 1;
+  }
+  lastCheckIn = today;
+  let bonus = 100;
+  if (checkInStreak === 10) bonus = 2000;
+  else if (checkInStreak === 20) bonus = 5000;
+  else if (checkInStreak === 30) bonus = 10000;
+  xu += bonus;
+  updateXuDisplay();
+  document.getElementById("checkinInfo").innerText = `Đã điểm danh ngày ${checkInStreak}, nhận ${bonus} xu.`;
+  renderCalendar();
+  updateRewards();
+}
+
+function renderCalendar() {
+  const body = document.getElementById("calendarBody");
+  body.innerHTML = "";
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  let row;
+  for (let d = 1; d <= daysInMonth; d++) {
+    if ((d - 1) % 10 === 0) {
+      row = document.createElement("tr");
+      body.appendChild(row);
+    }
+    const td = document.createElement("td");
+    td.innerText = d;
+    td.style.padding = "5px";
+    td.style.borderRadius = "4px";
+    td.style.backgroundColor = (d <= checkInStreak) ? "#44bb44" : "#444";
+    td.id = "day_" + d;
+    row.appendChild(td);
+  }
+}
+
+function updateRewards() {
+  if (checkInStreak === 10) alert("Chúc mừng! Bạn đã điểm danh 10 ngày liên tiếp và nhận 2000 xu!");
+  else if (checkInStreak === 20) alert("Tuyệt vời! Bạn đã điểm danh 20 ngày liên tiếp và nhận 5000 xu!");
+  else if (checkInStreak === 30) alert("Xuất sắc! Bạn đã điểm danh cả tháng và nhận 10000 xu!");
+}
+
+function loadVideos() {
+  const videoList = document.getElementById("videoList");
+  const ids = ["ktvTqknDobU", "dQw4w9WgXcQ"];
+  ids.forEach(id => {
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${id}`;
+    iframe.allow = "autoplay; encrypted-media";
+    iframe.allowFullscreen = true;
+    iframe.onplay = startCountdown;
+    iframe.onpause = stopCountdown;
+    videoList.appendChild(iframe);
+  });
+}
+
+window.onload = () => {
+  const savedUser = localStorage.getItem("loggedInUser");
+if (savedUser && users[savedUser]) {
+  username = savedUser;
+  isLoggedIn = true;
+  document.getElementById("loginForm").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "block";
+  document.getElementById("logoutBtn").style.display = "block";
+  if (username === "admin") {
+    document.getElementById("adminPanel").style.display = "block";
+  }
+}
+  loadVideos();
+  updateXuDisplay();
+  renderCalendar();
+};
+
+function duyetThe() {
+  const ma = document.getElementById("maThe").value.trim();
+  const seri = document.getElementById("seri").value.trim();
+  if (!ma || !seri) {
+    alert("Vui lòng nhập đầy đủ mã thẻ và seri.");
+    return;
+  }
+  document.getElementById("mailbox").innerText = `Thẻ đã duyệt: Mã ${ma}, Seri ${seri}`;
+  alert("Đã gửi mã thẻ tới người dùng!");
+}
+
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  location.reload();
+}
+
+
+function updateAdminInfo() {
+  const box = document.getElementById("yeuCauMoi");
+  if (!box) return;
+  const list = Object.entries(redeemRequests).map(([user, info]) => `• ${user}: ${info}`);
+  box.innerText = list.length ? list.join('\n') : "Chưa có yêu cầu nào.";
+}
+
+</script>
+
+
+</div>
+
+</body>
+</html>
+
+
+
+
+
+
+</div>
+
+</body></html>
